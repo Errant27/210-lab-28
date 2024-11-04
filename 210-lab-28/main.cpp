@@ -19,6 +19,8 @@ int main_menu();
 
 void merge_lists(list<Goat> &trip, string [], string []);
 void fill_list(list<Goat> &trip, string [], string []);
+void reverse_list(list<Goat> &trip);
+void clear_list(list<Goat> &trip);
 
 int main() {
     srand(time(0));
@@ -71,6 +73,12 @@ int main() {
             case 5:
                 fill_list(trip, names, colors);
                 break;
+            case 6:
+                reverse_list(trip);
+                break;
+            case 7:
+                clear_list(trip);
+                break;
             default:
                 cout << "Invalid selection.\n";
                 break;
@@ -89,6 +97,8 @@ int main_menu() {
     cout << "[3] List goats\n";
     cout << "[4] Merge List\n";
     cout << "[5] Fill List\n";
+    cout << "[6] Reverse List\n";
+    cout << "[7] Clear List\n";
     cout << "[n] Quit\n";
     cout << "Choice --> ";
     int choice;
@@ -182,4 +192,18 @@ void fill_list(list<Goat> &trip, string nms[], string cls[]) {
     fill(trip.begin(), trip.end(), tmp);
     cout << "Complete\n";
     display_trip(trip);
+}
+
+void reverse_list(list<Goat> &trip) {
+    cout << "Reversing list...\n";
+    reverse(trip.begin(), trip.end());
+    cout << "Complete\n";
+    display_trip(trip);
+}
+
+void clear_list(list<Goat> &trip) {
+        cout << "Clearing...\n";
+        trip.clear();
+        cout << "List of Goats is now " << trip.size() << endl;
+        cout << "----------------------------" << endl;
 }
