@@ -1,17 +1,24 @@
+// 210 | Lab 28 | Neil Orton
+// IDE Used: Xcode
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <algorithm>
+#include <random>
 #include <list>
 #include "Goat.h"
 using namespace std;
 
-const int SZ_NAMES = 200, SZ_COLORS = 25;
+const int SZ_NAMES = 200, SZ_COLORS = 25, CHOICES = 12;
 
 int select_goat(list<Goat> trip);
 void delete_goat(list<Goat> &trip);
 void add_goat(list<Goat> &trip, string [], string []);
 void display_trip(list<Goat> trip);
 int main_menu();
+
+void merge_lists(list<Goat> &trip, string [], string []);
+void fill_list(list<Goat> &trip, string [], string []);
 
 int main() {
     srand(time(0));
@@ -44,7 +51,7 @@ int main() {
     
     // Goat Manager 3001 Engine
     int sel = main_menu();
-    while (sel != 4) {
+    while (sel != CHOICES) {
         switch (sel) {
             case 1:
                 cout << "Adding a goat.\n";
@@ -57,6 +64,12 @@ int main() {
             case 3:
                 cout << "Displaying goat data.\n";
                 display_trip(trip);
+                break;
+            case 4:
+                merge_lists(trip, names, colors);
+                break;
+            case 5:
+                fill_list(trip, names, colors);
                 break;
             default:
                 cout << "Invalid selection.\n";
@@ -74,14 +87,17 @@ int main_menu() {
     cout << "[1] Add a goat\n";
     cout << "[2] Delete a goat\n";
     cout << "[3] List goats\n";
-    cout << "[4] Quit\n";
+    cout << "[4] Merge List\n";
+    cout << "[5] Fill List\n";
+    cout << "[n] Quit\n";
     cout << "Choice --> ";
     int choice;
     cin >> choice;
-    while (choice < 1 || choice > 4) {
+    while (choice < 1 || choice > CHOICES) {
         cout << "Invalid, again --> ";
         cin >> choice;
     }
+    cout << "----------------------------" << endl;
     return choice;
 }
 
@@ -125,4 +141,45 @@ int select_goat(list<Goat> trp) {
         cin >> input;
     }
     return input;
+}
+
+void merge_lists(list<Goat> &trip, string nms[], string cls[]) {
+    list<Goat> trip2;
+    
+    for (int i = 0; i < trip.size(); i++) {
+      int age = rand() % MAX_AGE;
+      string nm = nms[rand() % SZ_NAMES];
+      string cl = cls[rand() % SZ_COLORS];
+      Goat tmp(nm, age, cl);
+    trip2.push_back(tmp);
+    }
+    
+    cout << "List to merge\n";
+    int i = 1;
+    for (auto gt : trip2) {
+        cout << "\t"
+        << "[" << i++ << "] "
+        << gt.get_name()
+        << " (" << gt.get_age()
+        << ", " << gt.get_color() << ")\n";
+    }
+    list<Goat> mergedList(trip.size() + trip2.size());
+    
+    cout << "Merging list...\n";
+    merge(trip.begin(), trip.end(), trip2.begin(), trip2.end(), mergedList.begin());
+    trip = mergedList;
+    cout << "Merging complete\n";
+    display_trip(trip);
+}
+
+void fill_list(list<Goat> &trip, string nms[], string cls[]) {
+    int age = rand() % MAX_AGE;
+    string nm = nms[rand() % SZ_NAMES];
+    string cl = cls[rand() % SZ_COLORS];
+    Goat tmp(nm, age, cl);
+
+    cout << "Filling list with new Goat...\n";
+    fill(trip.begin(), trip.end(), tmp);
+    cout << "Complete\n";
+    display_trip(trip);
 }
