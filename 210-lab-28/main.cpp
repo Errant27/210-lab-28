@@ -1,5 +1,3 @@
-// 210 | Lab 28 | Neil Orton
-// IDE Used: Xcode
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -23,6 +21,9 @@ void reverse_list(list<Goat> &trip);
 void clear_list(list<Goat> &trip);
 void sort_list(list<Goat> &trip);
 void replace_data(list<Goat> &trip);
+void get_unique(list<Goat> &trip);
+void find_Goat(list<Goat> trip);
+
 
 
 int main() {
@@ -88,6 +89,12 @@ int main() {
             case 9:
                 replace_data(trip);
                 break;
+            case 10:
+                get_unique(trip);
+                break;
+            case 11:
+                find_Goat(trip);
+                break;
             default:
                 cout << "Invalid selection.\n";
                 break;
@@ -95,7 +102,6 @@ int main() {
         sel = main_menu();
     }
     
-
     return 0;
 }
 
@@ -103,14 +109,16 @@ int main_menu() {
     cout << "*** GOAT MANAGER 3001 ***\n";
     cout << "[1] Add a goat\n";
     cout << "[2] Delete a goat\n";
-    cout << "[3] List goats\n";
+    cout << "[3] Display goats\n";
     cout << "[4] Merge List\n";
     cout << "[5] Fill List\n";
     cout << "[6] Reverse List\n";
     cout << "[7] Clear List\n";
     cout << "[8] Sort List\n";
     cout << "[9] Replace Goat on List\n";
-    cout << "[n] Quit\n";
+    cout << "[10] Get Unique valuest\n";
+    cout << "[11] Search Goat in List\n";
+    cout << "[12] Quit\n";
     cout << "Choice --> ";
     int choice;
     cin >> choice;
@@ -129,6 +137,7 @@ void delete_goat(list<Goat> &trip) {
     advance(it, index-1);
     trip.erase(it);
     cout << "Goat deleted. New trip size: " << trip.size() << endl;
+    cout << "----------------------------" << endl;
 }
 
 void add_goat(list<Goat> &trip, string nms[], string cls[]) {
@@ -139,25 +148,23 @@ void add_goat(list<Goat> &trip, string nms[], string cls[]) {
     Goat tmp(nm, age, cl);
     trip.push_back(tmp);
     cout << "Goat added. New trip size: " << trip.size() << endl;
+    cout << "----------------------------" << endl;
 }
 
-void display_trip(list<Goat> trp) {
+void display_trip(list<Goat> trip) {
     int i = 1;
-    for (auto gt: trp)
-        cout << "\t"
-             << "[" << i++ << "] "
-             << gt.get_name()
-             << " (" << gt.get_age()
-             << ", " << gt.get_color() << ")\n";
+    for (auto gt : trip)
+        cout << "\t" << "[" << i++ << "] " << gt.get_name() << " (" << gt.get_age() << ", " << gt.get_color() << ")\n";
+    cout << "----------------------------" << endl;
 }
 
-int select_goat(list<Goat> trp) {
+int select_goat(list<Goat> trip) {
     int input;
     cout << "Make a selection:\n";
-    display_trip(trp);
+    display_trip(trip);
     cout << "Choice --> ";
     cin >> input;
-    while (input < 1 or input > trp.size()) {
+    while (input < 1 or input > trip.size()) {
         cout << "Invalid choice, again --> ";
         cin >> input;
     }
@@ -251,7 +258,38 @@ void replace_data(list<Goat> &trip) {
     cin >> color2;
     
     Goat goat1(name1, age1, color1);
-    Goat goat2(name2, age2, color2);
-    replace(trip.begin(), trip.end(), goat1, goat2);
+    Goat gaot2(name2, age2, color2);
+    replace(trip.begin(), trip.end(), goat1, gaot2);
     display_trip(trip);
+}
+
+void get_unique(list<Goat> &trip) {
+    sort_list(trip);
+    cout << "Removing duplicate values...\n";
+        auto newEnd = unique(trip.begin(), trip.end());
+        trip.erase(newEnd, trip.end());
+    cout << "Complete\n";
+        display_trip(trip);
+}
+
+void find_Goat(list<Goat> trip) {
+    int age;
+    string name;
+    string color;
+
+    cout << "Name to search: ";
+    cin >> name;
+    cout << "Age to search: ";
+    cin >> age;
+    cout << "Color to search: ";
+    cin >> color;
+    Goat tmp(name, age, color);
+
+    auto it = find(trip.begin(), trip.end(), tmp);
+    if (it != trip.end()) {
+        cout << "Found the Goat: " << it->get_name() << " (" << it->get_age() << ", " << it->get_color() << ")"<< endl;
+    } else {
+        cout << "Goat not found\n";
+    }
+    cout << "----------------------------" << endl;
 }
