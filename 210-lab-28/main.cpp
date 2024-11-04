@@ -21,6 +21,9 @@ void merge_lists(list<Goat> &trip, string [], string []);
 void fill_list(list<Goat> &trip, string [], string []);
 void reverse_list(list<Goat> &trip);
 void clear_list(list<Goat> &trip);
+void sort_list(list<Goat> &trip);
+void replace_data(list<Goat> &trip);
+
 
 int main() {
     srand(time(0));
@@ -79,6 +82,12 @@ int main() {
             case 7:
                 clear_list(trip);
                 break;
+            case 8:
+                sort_list(trip);
+                break;
+            case 9:
+                replace_data(trip);
+                break;
             default:
                 cout << "Invalid selection.\n";
                 break;
@@ -99,6 +108,8 @@ int main_menu() {
     cout << "[5] Fill List\n";
     cout << "[6] Reverse List\n";
     cout << "[7] Clear List\n";
+    cout << "[8] Sort List\n";
+    cout << "[9] Replace Goat on List\n";
     cout << "[n] Quit\n";
     cout << "Choice --> ";
     int choice;
@@ -206,4 +217,41 @@ void clear_list(list<Goat> &trip) {
         trip.clear();
         cout << "List of Goats is now " << trip.size() << endl;
         cout << "----------------------------" << endl;
+}
+
+void sort_list(list<Goat> &trip) {
+    cout << "Sorting...\n";
+    trip.sort();
+    cout << "Complete\n";
+    display_trip(trip);
+}
+
+void replace_data(list<Goat> &trip) {
+    string name1;
+    string name2;
+    int age1;
+    int age2;
+    string color1;
+    string color2;
+    
+    cout << "Enter Goat data you want to replace\n";
+    cout << "Name: ";
+    cin >> name1;
+    cout << "Age: ";
+    cin >> age1;
+    cout << "Color: ";
+    cin >> color1;
+    
+    cout << "Enter Goat data you want to add\n";
+    cout << "Name: ";
+    cin >> name2;
+    cout << "Age: ";
+    cin >> age2;
+    cout << "Color: ";
+    cin >> color2;
+    
+    Goat goat1(name1, age1, color1);
+    Goat goat2(name2, age2, color2);
+    replace(trip.begin(), trip.end(), goat1, goat2);
+    display_trip(trip);
 }
